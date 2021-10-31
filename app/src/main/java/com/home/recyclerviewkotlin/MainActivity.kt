@@ -2,14 +2,15 @@ package com.home.recyclerviewkotlin
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RecyclerViewAdapter.OnItemClickListener {
     private val list = generateList(200)
-    private val adapter = RecyclerViewAdapter(list)
+    private val adapter = RecyclerViewAdapter(list, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,13 @@ class MainActivity : AppCompatActivity() {
         )
         list.add(index, newItem)
         adapter.notifyItemInserted(index)
+    }
+
+    override fun onItemClick(position: Int) {
+        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
+        val clickedItem = list[position]
+        clickedItem.text1 = "clicked"
+        adapter.notifyItemChanged(position)
     }
 
     private fun generateList(size: Int): ArrayList<RecyclerViewItem> {
